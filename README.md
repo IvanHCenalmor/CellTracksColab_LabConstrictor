@@ -11,6 +11,6 @@ The installer would only be available once CellTracksColab developer has created
 Please, go to [this page](.tools/docs/download_executable.md) and check if the installing instructions are there.
 In case there is no documentation there, please [create an issue](https://github.com/IvanHCenalmor/CellTracksColab_LabConstrictor/issues) asking the developer to create a release.
 ## Documentation for CellTracksColab's Developers
-
+ 
 Internal documentation on how to upload notebooks or create executables is available in the [.tools/docs](.tools/docs/README.md) folder.
 
