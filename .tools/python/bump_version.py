@@ -125,34 +125,30 @@ def bump_post_install_bat(new_version: str) -> None:
     print(f"Updated post_install.bat PKG_VERSION to {new_version}")
 
 def bump_version_in_download_executable_md(new_version: str) -> None:
-    possible_download_md_paths = [
-        ROOT / "docs" / "download_executable.md",
-        ROOT / ".tools" / "docs" / "download_executable.md"
-    ]
+    download_md = ROOT / "docs" / "download_executable.md"
     template_md = ROOT / ".tools" / "templates" / "download_executable_template.md"
 
-    for download_md in possible_download_md_paths:
-        # We only want to update the existing files
+    # On the first release replace download_executable.md with the template
+    # (but only if it exists)
+    if template_md.exists():
+        # Remove existing download_executable.md if present
         if download_md.exists():
-            # Replace download_executable.md with the template (but only if it exists)
-            if template_md.exists():
-                # Remove existing download_executable.md if present
-                if download_md.exists():
-                    download_md.unlink()
-                # Copy the template to the docs folder using shutil for cross-platform support
-                shutil.copy(template_md, download_md)
-            else:
-                print("Template for download_executable.md not found! Skipping creation of download_executable.md")
-                return
+            download_md.unlink()
+        # Copy the template to the docs folder using shutil for cross-platform support
+        shutil.copy(template_md, download_md)
+    else:
+        print("Template for download_executable.md not found! Skipping creation of download_executable.md")
+        return
+    
+    # This file contains placeholders, update them with the new version
+    text = download_md.read_text(encoding="utf-8")
+    updated_text = replace_version_placeholder(text, new_version)
+    if updated_text != text:
+        download_md.write_text(updated_text, encoding="utf-8")
+        print(f"Updated download_executable.md to version {new_version}")
+    else:
+        print("No version string found in download_executable.md to update.")
 
-            # This file contains placeholders, update them with the new version
-            text = download_md.read_text(encoding="utf-8")
-            updated_text = replace_version_placeholder(text, new_version)
-            if updated_text != text:
-                download_md.write_text(updated_text, encoding="utf-8")
-                print(f"Updated download_executable.md to version {new_version}")
-            else:
-                print("No version string found in download_executable.md to update.")
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Update project version across release artifacts.",
