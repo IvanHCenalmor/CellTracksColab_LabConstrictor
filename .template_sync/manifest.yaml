@@ -1,4 +1,4 @@
-template_version: 0.1.8
+template_version: 0.1.9
 migrations:
   - from: 0.0.1
     to: 0.1.0
